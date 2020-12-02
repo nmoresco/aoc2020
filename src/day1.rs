@@ -4,8 +4,8 @@ pub fn solve_floor() {
     let contents = fs::read_to_string("./resources/1-1.txt")
         .expect("Something went wrong reading the file");
 
-    let entries: Vec<i32> = contents.lines().map(|line| line.parse()).unwrap().collect();
-    find_pair_match(entries);
+    let entries: Vec<i32> = contents.lines().map(|line| line.parse().unwrap()).collect();
+    let result = find_pair_match(entries);
 
     println!("{}", result);
 }
@@ -14,8 +14,8 @@ pub fn solve_basement() {
     let contents = fs::read_to_string("./resources/1-1.txt")
         .expect("Something went wrong reading the file");
 
-    let entries: Vec<i32> = contents.lines().map(|line| line.parse()).unwrap().collect();
-    find_triple_match(entries);
+    let entries: Vec<i32> = contents.lines().map(|line| line.parse().unwrap()).collect();
+    let result = find_triple_match(entries);
 
     println!("{}", result);
 }
