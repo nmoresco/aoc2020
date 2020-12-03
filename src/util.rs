@@ -1,6 +1,15 @@
-pub fn create_board_char(data: &str) -> Vec<Vec<char>> {
+pub fn create_board(data: &str) -> Vec<Vec<char>> {
     data.trim()
         .split("\n")
         .map(|row| row.trim().chars().collect())
         .collect()
+}
+
+pub fn print_board(board: &Vec<Vec<char>>) {
+    for row in board{
+        for col in row {
+            print!("{}", col);
+        }
+        println!();
+    }
 }

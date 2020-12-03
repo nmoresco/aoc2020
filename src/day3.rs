@@ -1,15 +1,15 @@
-use crate::util::create_board_char;
+use crate::util::{create_board};
 
 pub fn solve_floor() {
     let data = include_str!("../resources/3-1.txt");
-    let array = create_board_char(data);
+    let array = create_board(data);
 
     println!("{}", traverse_slope(&array, 3, 1));
 }
 
 pub fn solve_basement() {
     let data = include_str!("../resources/3-1.txt");
-    let array = create_board_char(data);
+    let array = create_board(data);
 
     let slopes: Vec<(usize, usize)> = vec![(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)];
     let num_trees = slopes.iter().fold(1, |acc, (x, y)| acc * traverse_slope(&array, *x, *y));
