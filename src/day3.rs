@@ -11,11 +11,8 @@ pub fn solve_basement() {
     let data = include_str!("../resources/3-1.txt");
     let array = create_board_char(data);
 
-    let mut num_trees: u64 = traverse_slope(&array, 1, 1);
-    num_trees *= traverse_slope(&array, 3, 1);
-    num_trees *= traverse_slope(&array, 5, 1);
-    num_trees *= traverse_slope(&array, 7, 1);
-    num_trees *= traverse_slope(&array, 1, 2);
+    let slopes: Vec<(usize, usize)> = vec![(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)];
+    let num_trees = slopes.iter().fold(1, |acc, (x, y)| acc * traverse_slope(&array, *x, *y));
 
     println!("{}", num_trees);
 }
