@@ -1,5 +1,3 @@
-use regex::Regex;
-
 pub fn solve_floor() {
     let data = include_str!("../resources/4-1.txt");
     let passports: Vec<Passport> = data.split("\n\n")
@@ -52,13 +50,13 @@ fn construct_passport(entry: &str) -> Passport {
 }
 
 fn validate_passport(passport: &Passport) -> bool {
-    return !passport.birth_year.is_empty()
-        && !passport.issue_year.is_empty()
-        && !passport.expiration_year.is_empty()
-        && !passport.height.is_empty()
-        && !passport.hair_color.is_empty()
-        && !passport.eye_color.is_empty()
-        && !passport.passport_id.is_empty();
+    !passport.birth_year.is_empty() &&
+        !passport.issue_year.is_empty() &&
+        !passport.expiration_year.is_empty() &&
+        !passport.height.is_empty() &&
+        !passport.hair_color.is_empty() &&
+        !passport.eye_color.is_empty() &&
+        !passport.passport_id.is_empty()
 }
 
 fn validate_passport_strict(passport: &Passport) -> bool {
@@ -96,11 +94,11 @@ fn validate_passport_strict(passport: &Passport) -> bool {
         false
     };
 
-    // A macro that ensures the regex is only compiled once.
-    lazy_static! {
-        static ref HAIR_REGEX: Regex = Regex::new("^#[0-9a-f]{6}$").unwrap();
-    }
-    let hair_pass = HAIR_REGEX.is_match(passport.hair_color);
+    let hair_pass = passport.hair_color.starts_with('#')
+        && match i32::from_str_radix(&passport.hair_color[1..], 16) {
+        Ok(num) => num >= 0 && num <= 0xffffff,
+        Err(_) => false
+    };
 
     let eye_pass = match passport.eye_color {
         "amb" => true,
