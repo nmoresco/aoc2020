@@ -1,14 +1,17 @@
+#[macro_use]
+extern crate lazy_static;
+
 use std::env;
 
-mod day3;
+mod day4;
 mod util;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 || args[1].to_lowercase() != "basement" {
-        day3::solve_floor();
+        day4::solve_floor();
     }
     else {
-        day3::solve_basement();
+        day4::solve_basement();
     }
 }

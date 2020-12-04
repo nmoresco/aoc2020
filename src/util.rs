@@ -5,6 +5,7 @@ pub fn create_board(data: &str) -> Vec<Vec<char>> {
         .collect()
 }
 
+#[allow(dead_code)]
 pub fn print_board(board: &[Vec<char>]) {
     for row in board{
         for col in row {
