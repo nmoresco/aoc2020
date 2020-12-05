@@ -3,15 +3,15 @@ extern crate lazy_static;
 
 use std::env;
 
-mod day4;
 mod util;
+mod day5;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 || args[1].to_lowercase() != "basement" {
-        day4::solve_floor();
+        day5::solve_floor();
     }
     else {
-        day4::solve_basement();
+        day5::solve_basement();
     }
 }

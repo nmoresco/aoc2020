@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub fn create_board(data: &str) -> Vec<Vec<char>> {
     data.trim()
         .split('\n')
