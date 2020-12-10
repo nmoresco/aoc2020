@@ -1,8 +1,3 @@
-struct Node {
-    children: Vec<Node>,
-    value: i64
-}
-
 pub fn solve_floor() {
     let data = parse_data();
 
@@ -25,54 +20,38 @@ pub fn solve_floor() {
 pub fn solve_basement() {
     let data = parse_data();
 
-    let root = Node {
-        children: find_valid_adapters(&data[1..].to_vec(), 0),
-        value: 0
-    };
+    // Since there happens to be no numbers that are exactly 2 apart, you only need to worry about
+    // 1 apart and 3 apart. Turns out, groups of 1 apart have permutations that follow the
+    // tribonacci sequence. So find those and multiply em together.
+    let slices = consecutive_slices(data);
+    let answer: i64 = slices.iter().map(|x| tribonacci(x.len())).product();
 
-    println!("DAG built, finding combinations...");
-    println!("{}", find_combinations(root, *data.iter().max().unwrap()));
+    println!("{}", answer);
 }
 
-fn find_combinations(root: Node, max_value: i64) -> i64 {
-    let mut stack = vec!();
-    let mut count = 0;
-    stack.push(root);
-    while !stack.is_empty() {
-        let cur_node = stack.pop().unwrap();
-        if cur_node.value == max_value {
-            count += 1;
-        }
-        for child in cur_node.children {
-            stack.push(child);
+fn consecutive_slices(data: Vec<i64>) -> Vec<Vec<i64>> {
+    let mut slice_start = 0;
+    let mut result = Vec::new();
+    for i in 1..data.len() {
+        if data[i] - data[i - 1] != 1 {
+            result.push(data[slice_start..i].to_vec());
+            slice_start = i;
         }
     }
-
-    count
+    if data.len() > 0 {
+        result.push(data[slice_start..].to_vec());
+    }
+    result
 }
 
-fn find_valid_adapters(data: &Vec<i64>, cur_node: i64) -> Vec<Node> {
-    let mut possible_adapters = Vec::new();
-    for adapter in data {
-        let difference = adapter - cur_node;
-        if difference <= 0 {
-            continue;
-        }
-        else if difference <= 3 {
-            possible_adapters.push(*adapter);
-        }
-        else {
-            break;
-        }
+fn tribonacci(number: usize) -> i64 {
+    match number {
+        0 => 0,
+        1 => 1,
+        2 => 1,
+        3 => 2,
+        _ => tribonacci(number - 1) + tribonacci(number - 2) + tribonacci(number - 3)
     }
-
-    possible_adapters
-        .iter()
-        .map(|&x| Node {
-            children: find_valid_adapters(&data, x),
-            value: x
-        })
-        .collect::<Vec<Node>>()
 }
 
 fn parse_data() -> Vec<i64> {
