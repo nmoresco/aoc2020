@@ -4,14 +4,14 @@
 use std::env;
 
 mod util;
-mod day9;
+mod day10;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 || args[1].to_lowercase() != "basement" {
-        day9::solve_floor();
+        day10::solve_floor();
     }
     else {
-        day9::solve_basement();
+        day10::solve_basement();
     }
 }
