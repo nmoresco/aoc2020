@@ -123,11 +123,7 @@ fn floating_assign(location: &str, value: u64, memory: &mut HashMap<u64, u64>) {
         let location: u64 = u64::from_str_radix(location, 2).unwrap();
         memory.insert(location, value);
     } else {
-        let index = location.find("X").unwrap();
-        let option1 = [&location[..index], &location[index + 1..]].join("0");
-        let option2 = [&location[..index], &location[index + 1..]].join("1");
-
-        floating_assign(&option1, value, memory);
-        floating_assign(&option2, value, memory);
+        floating_assign(&location.replacen("X", "0", 1), value, memory);
+        floating_assign(&location.replacen("X", "1", 1), value, memory);
     }
 }
