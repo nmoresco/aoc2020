@@ -17,7 +17,21 @@ pub fn solve_floor() {
     println!("{}", solve(*starting_numbers.last().unwrap(), spoken_numbers, 2020));
 }
 
-pub fn solve_basement() {}
+pub fn solve_basement() {
+    let starting_numbers: Vec<usize> = include_str!("../resources/15-1.txt")
+        .trim()
+        .split(",")
+        .map(|num| num.parse().unwrap())
+        .collect();
+
+    let spoken_numbers: HashMap<usize, usize> = starting_numbers
+        .iter()
+        .enumerate()
+        .map(|(i, &num)| (num, i + 1))
+        .collect();
+
+    println!("{}", solve(*starting_numbers.last().unwrap(), spoken_numbers, 30000000));
+}
 
 fn solve(starting_number: usize, mut spoken_numbers: HashMap<usize, usize>, iterations: usize) -> usize {
     let mut current_num = starting_number;
