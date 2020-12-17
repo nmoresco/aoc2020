@@ -1,16 +1,45 @@
 use std::collections::HashMap;
 
 pub fn solve_floor() {
-    let mut board: HashMap<(isize, isize, isize, isize), char> = include_str!("../resources/17-1.txt")
-        .lines()
-        .enumerate()
-        .map(|(row, line)| {
-            line.chars()
-                .enumerate()
-                .map(move |(col, char)| ((row as isize, col as isize, 0 as isize, 0 as isize), char))
-        })
-        .flatten()
-        .collect();
+    let mut board = parse_data();
+
+    let start_dimension = include_str!("../resources/17-1.txt").lines().count() as isize;
+    let mut active_start_dimensions: (isize, isize, isize, isize) = (0, 0, 0, 0);
+    let mut active_end_dimensions = (start_dimension, start_dimension, 0, 0);
+
+    for _i in 0..6 {
+        // Expand active dimensions
+        active_start_dimensions = (active_start_dimensions.0 - 1,
+                                   active_start_dimensions.1 - 1,
+                                   active_start_dimensions.2 - 1,
+                                   active_start_dimensions.3);
+        active_end_dimensions = (active_end_dimensions.0 + 1,
+                                 active_end_dimensions.1 + 1,
+                                 active_end_dimensions.2 + 1,
+                                 active_end_dimensions.3);
+
+        let mut active_board = board.clone();
+
+        let w = 0;
+        for x in active_start_dimensions.0..active_end_dimensions.0 + 1 {
+            for y in active_start_dimensions.1..active_end_dimensions.1 + 1 {
+                for z in active_start_dimensions.2..active_end_dimensions.2 + 1 {
+                    active_board.insert((x, y, z, w), step(x, y, z, w, *active_board.get(&(x, y, z, w)).unwrap_or(&'.'), &board));
+                }
+            }
+        }
+
+        board = active_board;
+
+        print_board(&board, active_start_dimensions, active_end_dimensions);
+    }
+
+    println!("{}", board.values().filter(|&&char| char == '#').count());
+}
+
+
+pub fn solve_basement() {
+    let mut board = parse_data();
 
     let start_dimension = include_str!("../resources/17-1.txt").lines().count() as isize;
     let mut active_start_dimensions: (isize, isize, isize, isize) = (0, 0, 0, 0);
@@ -47,7 +76,19 @@ pub fn solve_floor() {
     println!("{}", board.values().filter(|&&char| char == '#').count());
 }
 
-pub fn solve_basement() {}
+fn parse_data() -> HashMap<(isize, isize, isize, isize), char> {
+    let mut board: HashMap<(isize, isize, isize, isize), char> = include_str!("../resources/17-1.txt")
+        .lines()
+        .enumerate()
+        .map(|(row, line)| {
+            line.chars()
+                .enumerate()
+                .map(move |(col, char)| ((row as isize, col as isize, 0 as isize, 0 as isize), char))
+        })
+        .flatten()
+        .collect();
+    board
+}
 
 fn step(x: isize, y: isize, z: isize, w: isize, char: char, board: &HashMap<(isize, isize, isize, isize), char>) -> char {
     let mut count_active = 0;
