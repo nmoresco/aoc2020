@@ -25,7 +25,7 @@ pub fn solve_floor() {
         active_end_dimensions = (active_end_dimensions.0 + 1,
                                  active_end_dimensions.1 + 1,
                                  active_end_dimensions.2 + 1,
-                                 active_end_dimensions.3 - 1);
+                                 active_end_dimensions.3 + 1);
 
         let mut active_board = board.clone();
 
@@ -55,7 +55,7 @@ fn step(x: isize, y: isize, z: isize, w: isize, char: char, board: &HashMap<(isi
         for dy in (y - 1)..(y + 2) {
             for dz in (z - 1)..(z + 2) {
                 for dw in (w - 1)..(w + 2) {
-                    if (x, y, z) == (dx, dy, dz) {
+                    if (x, y, z, w) == (dx, dy, dz, dw) {
                         continue;
                     }
                     count_active += match board.get(&(dx, dy, dz, dw)) {
@@ -90,8 +90,8 @@ fn print_board(board: &HashMap<(isize, isize, isize, isize), char>,
                start_dimensions: (isize, isize, isize, isize),
                end_dimensions: (isize, isize, isize, isize)) {
     println!("=================");
-    for z in start_dimensions.2..end_dimensions.2 + 1 {
-        for w in start_dimensions.3..end_dimensions.3 + 1 {
+    for w in start_dimensions.3..end_dimensions.3 + 1 {
+        for z in start_dimensions.2..end_dimensions.2 + 1 {
             println!("z={}, w={}", z, w);
             for x in start_dimensions.0..end_dimensions.0 + 1 {
                 for y in start_dimensions.1..end_dimensions.1 + 1 {
