@@ -1,7 +1,10 @@
+use crate::day18_util::{Node, parse_line, run_expression, Term, Token};
 use crate::day18_util::Token::{CloseParen, Num, Op, OpenParen, Space};
-use crate::day18_util::{Token, parse_line, run_expression, Node, Term, parse_term};
 
 pub fn solve_floor() {
+}
+
+pub fn solve_basement() {
     let data: Vec<Vec<Token>> = include_str!("../resources/18-1.txt")
         .lines()
         .map(|line| parse_line(line))
@@ -17,12 +20,28 @@ pub fn solve_floor() {
 }
 
 fn parse_expression(tokens: &[Token]) -> (Node, &[Token]) {
+    let (left_side, remaining_tokens) = parse_operand(tokens);
+    match remaining_tokens.get(0) {
+        Some(&Op('*')) => {
+            println!("next token is {:?}", remaining_tokens[0]);
+            let (right_side, remaining_tokens) = parse_expression(&remaining_tokens[1..]);
+            let operation = Node::new(Term::Product, vec![left_side, right_side]);
+
+            (operation, &remaining_tokens)
+        }
+        _ => {
+            (left_side, remaining_tokens)
+        }
+    }
+}
+
+fn parse_operand(tokens: &[Token]) -> (Node, &[Token]) {
     let (left_side, remaining_tokens) = parse_term(tokens).unwrap();
     match remaining_tokens.get(0) {
-        Some(&Op(ch)) => {
-            let item = if ch == '*' { Term::Product } else { Term::Add };
-            let (right_side, remaining_tokens) = parse_expression(&remaining_tokens[1..]);
-            let operation = Node::new(item, vec![left_side, right_side]);
+        Some(&Op('+')) => {
+            println!("next token is {:?}", remaining_tokens[0]);
+            let (right_side, remaining_tokens) = parse_operand(&remaining_tokens[1..]);
+            let operation = Node::new(Term::Add, vec![left_side, right_side]);
 
             (operation, &remaining_tokens)
         }
@@ -62,5 +81,3 @@ fn parse_term(tokens: &[Token]) -> Result<(Node, &[Token]), String> {
         }
     };
 }
-
-pub fn solve_basement() {}
